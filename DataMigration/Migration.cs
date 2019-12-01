@@ -116,7 +116,7 @@ namespace DataMigration
             IList<OldUnits> units = ctx1.Units.ToList();
             if(units.Count > 0)
             {
-                double fract = units.Count % 10;
+                double fract = units.Count % 20;
                 numOfProcesses = (int)Math.Ceiling(fract);
                 var limit = units.Count / numOfProcesses;
 
@@ -157,7 +157,7 @@ namespace DataMigration
         protected void ChildProcess(IProgressBar pbar, IList items, Action<object> childAction = null)
         {
             var childMax = items.Count;
-            var counter = 0;
+            var counter = 1;
             using var child = pbar.Spawn(childMax, "Child process", ChildProgressBarOptions);
             foreach (var item in items)
             {
@@ -175,14 +175,16 @@ namespace DataMigration
 
         protected void MigrateUserAssociation(MemberAssociation item)
         {
-            var member = ctx1.Members.Where(m => m.MemberId == item.MemberId).FirstOrDefault();
+            var db1 = new SourceDbContext();
+            var db2 = new HostDbContext();
+            var member = db1.Members.Where(m => m.MemberId == item.MemberId).FirstOrDefault();
             if (member != null)
             {
-                var user = ctx2.User.Where(x => x.Phone == member.Phone.ToString()).FirstOrDefault();
-                var unit = ctx2.Units.Where(x => x.UnitId == item.UnitId).FirstOrDefault();
+                var user = db2.User.Where(x => x.Phone == member.Phone.ToString()).FirstOrDefault();
+                var unit = db2.Units.Where(x => x.UnitId == item.UnitId).FirstOrDefault();
                 if (user != null && unit != null)
                 {
-                    var isAssociated = ctx2.UserAssociation.Where(x => x.UnitId == unit.Id && x.IdUser == user.Id).FirstOrDefault();
+                    var isAssociated = db2.UserAssociation.Where(x => x.UnitId == unit.Id && x.IdUser == user.Id).FirstOrDefault();
                     if (isAssociated == null)
                     {
                         var ua = new UserAssociation
@@ -190,11 +192,13 @@ namespace DataMigration
                             IdUser = user.Id,
                             UnitId = unit.Id
                         };
-                        ctx2.UserAssociation.Add(ua);
-                        ctx2.SaveChanges();
+                        db2.UserAssociation.Add(ua);
+                        db2.SaveChanges();
                     }
                 }
             }
+            db1.Dispose();
+            db2.Dispose();
         }
 
         protected void MigrateUnit(OldUnits unit)

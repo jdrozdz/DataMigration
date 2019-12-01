@@ -115,7 +115,7 @@ namespace DataMigration.Models
             {
                 entity.ToTable("user_association");
 
-                entity.HasIndex(e => new { e.UnitId, e.UserId })
+                entity.HasIndex(e => new { e.UnitId, e.IdUser })
                     .HasName("user_association_uk")
                     .IsUnique();
 
@@ -124,8 +124,6 @@ namespace DataMigration.Models
                 entity.Property(e => e.IdUser).HasColumnName("id_user");
 
                 entity.Property(e => e.UnitId).HasColumnName("unit_id");
-
-                entity.Property(e => e.UserId).HasColumnName("user_id");
 
                 entity.HasOne(d => d.IdUserNavigation)
                     .WithMany(p => p.UserAssociation)
@@ -146,7 +144,7 @@ namespace DataMigration.Models
                     .HasName("uniq_e9b07449f8bd700d")
                     .IsUnique();
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Description)
                     .IsRequired()

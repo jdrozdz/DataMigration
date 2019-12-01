@@ -6,7 +6,6 @@ namespace DataMigration.Models
     public partial class UserAssociation
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
         public int UnitId { get; set; }
         public int? IdUser { get; set; }
 
