@@ -1,12 +1,10 @@
 ﻿using DataMigration.Models;
-using Npgsql;
 using ShellProgressBar;
 using System;
 using System.IO;
 using System.Text.Json;
 using System.Linq;
 using System.Collections;
-using System.Threading;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -30,7 +28,7 @@ namespace DataMigration
             }
         }
 
-        public ProgressBarOptions ProgressBarOptions
+        protected ProgressBarOptions ProgressBarOptions
         {
             get
             {
@@ -44,7 +42,7 @@ namespace DataMigration
             }
         }
 
-        public ProgressBarOptions ChildProgressBarOptions
+        protected ProgressBarOptions ChildProgressBarOptions
         {
             get
             {
@@ -78,7 +76,7 @@ namespace DataMigration
             Console.WriteLine(skill.Skill);
         }
 
-        public void Start()
+        public void MigrateUsers()
         {
             var members = ctx1.Members.ToList();
             TotalTicks = members.Count;

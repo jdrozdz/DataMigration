@@ -12,15 +12,15 @@ namespace DataMigration
             var k = Console.ReadKey();
             if (k.KeyChar.ToString().ToLower().Equals("y"))
             {
-                migration.Start();
+                migration.MigrateUsers();
             }
-            Console.WriteLine("Do you want migrate units? [Y/N]");
+            Console.WriteLine("\nDo you want migrate units? [Y/N]");
             k = Console.ReadKey();
             if (k.KeyChar.ToString().ToLower().Equals("y"))
             {
                 migration.MigrateUnits();
             }
-            Console.WriteLine("Do you want migrate user association to units? [Y/N]");
+            Console.WriteLine("\nDo you want migrate user association to units? [Y/N]");
             k = Console.ReadKey();
             if (k.KeyChar.ToString().ToLower().Equals("y"))
             {

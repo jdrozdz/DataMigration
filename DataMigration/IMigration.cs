@@ -4,8 +4,9 @@ namespace DataMigration
 {
     public interface IMigration
     {
-        void Start();
+        void MigrateUsers();
         void MigrateAssociation();
+        void MigrateUnits();
         ConfigModel GetConfig();
 
         void TestEF();
